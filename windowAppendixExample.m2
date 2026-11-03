@@ -1,4 +1,4 @@
-load("windowAppendixNEW.m2")
+load("windowAppendix.m2")
 classMap = transpose matrix({{0,0,1},{0,0,1},{0,2,1},{0,2,1},{1,1,1},{2,1,1},{3,0,1}})
 divisorVector = transpose matrix({{0,0,2,-5,7,5,-2}})
 Iplus = {5,6}
