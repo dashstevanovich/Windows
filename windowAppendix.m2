@@ -72,7 +72,7 @@ getNerve(Matrix, List, Polyhedron) := (cellCeiling, L, divisorPolytope) -> (
 getNonacyclicLabels = method()
 getNonacyclicLabels(Matrix,Polyhedron,List,List) := (classMap,divisorPolytope,allClosedCells,L) -> (
     n := numcols classMap;
-    S := ZZ[x_0..x_(n-1)];
+    S := QQ[x_0..x_(n-1)];
     SVars := vars S;
     allCellCeilings := unique(apply(allClosedCells, Q -> getCellCeiling(Q)));
     allNerves := apply(allCellCeilings, cellCeiling -> getNerve(cellCeiling,L,divisorPolytope));
@@ -94,20 +94,21 @@ getLambdaPlusMinusCone(Matrix, List, List) := (classMap, Iplus, Izero) -> (
     );
 
 weightsTooWide = method()
-weightsTooWide(List,Cone,Matrix,List) := (nonacyclicLabels,lambdaCone,classMap,Iplus) -> (
-    CMaxCones := apply(nonacyclicLabels, label1 -> intersection(lambdaCone,
-	    coneFromHData(matrix(apply(nonacyclicLabels,
-		    label2 -> flatten entries transpose (label1-label2))))));
-    CMinCones := apply(nonacyclicLabels, label1 -> intersection(lambdaCone,
-	   coneFromHData(matrix(apply(nonacyclicLabels,
-		    label2 -> flatten entries transpose (label2-label1))))));
+weightsTooWide(List,Cone,Matrix,List) := (nonacyclicImages,lambdaCone,classMap,Iplus) -> (
+    CMaxCones := apply(nonacyclicImages, image1 -> intersection(lambdaCone,
+	    coneFromHData(matrix(apply(nonacyclicImages,
+		    image2 -> flatten entries transpose (image1-image2))))));
+    CMinCones := apply(nonacyclicImages, image1 -> intersection(lambdaCone,
+	   coneFromHData(matrix(apply(nonacyclicImages,
+		    image2 -> flatten entries transpose (image2-image1))))));
     betaIplus := submatrix(classMap,Iplus)*matrix(table(length(Iplus),1,(i,j) -> 1));
-    labelIterator := 0..(length(nonacyclicLabels)-1);
-    scan(labelIterator, i -> scan(labelIterator, j ->
+    imageIterator := 0..(length(nonacyclicImages)-1);
+    scanPassed = true;
+    scan(imageIterator, i -> scan(imageIterator, j ->
 	    if not contains(coneFromHData(
-		    transpose(nonacyclicLabels_i - nonacyclicLabels_j-betaIplus)),
-		intersection(CMaxCones_i,CMinCones_j)) then return false));
-    return true
+		    transpose(nonacyclicImages_i - nonacyclicImages_j-betaIplus)),
+		intersection(CMaxCones_i,CMinCones_j)) then scanPassed = false));
+    return scanPassed
     );
 
 end
