@@ -14,7 +14,7 @@ weightsTooWideWrapped = L -> (
     weightsTooWide(nonacyclicImages,lambdaCone,classMap, Iplus)
     );
 
-apply(L -> weightsTooWideWrapped(L))
+apply(Ls, L -> weightsTooWideWrapped(L))
 
 -- Verifying the example by first loading the nonacyclic labels:
 -- Computing the nonacyclic labels is the most expensive part of this verification, so we saved
@@ -40,4 +40,3 @@ weightsTooWideWrappedWithImages = L -> (
     );
 
 apply(Ls, L -> weightsTooWideWrappedWithImages(L))
-
